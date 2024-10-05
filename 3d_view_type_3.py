@@ -3,11 +3,38 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import math
 
-ht = 1500
-vt = 10000
-kop = 7000
-sur_co = np.array([5.06,15.32])
-azi = 1.0472
+# ht = 1500
+# vt = 10000
+# kop = 7000
+# sur_co = np.array([5.06,15.32])
+# azi = 1.0472
+vt = int(input("Enter vertical depth (vt): "))
+kop = int(input("Enter kickoff point (kop): "))
+
+# Surface coordinates input (two float values)
+surface_x = float(input("Enter surface North-coordinate: "))
+surface_y = float(input("Enter surface East-coordinate: "))
+sur_co = np.array([surface_x, surface_y])
+
+# Target coordinates input (two float values)
+target_x = float(input("Enter target North-coordinate: "))
+target_y = float(input("Enter target East-coordinate: "))
+tar_co = np.array([target_x, target_y])
+
+a = 0
+for [t_cor,s_cor] in zip(tar_co,sur_co):
+  a += (t_cor-s_cor)**2
+a = np.sqrt(a)
+ht = a
+
+if tar_co[0] == sur_co[0]:
+    slope = math.pi / 2  # 90 degrees in radians
+else:
+    slope = math.atan((tar_co[1] - sur_co[1]) / (tar_co[0] - sur_co[0]))
+
+azi = 90 - slope
+azi = math.radians(azi)
+
 
 h = []
 e = []
@@ -51,23 +78,14 @@ for i in range(p):
   n1.append(nitr)
   d1.append(ditr)
 
-# ax = plt.axes(projection = '3d')
-# ax.plot(e,n,d)
-# ax.plot(e1,n1,d1,color = 'k')
-# plt.xlabel("East")
-# plt.ylabel("North")
-# ax.set_zlabel('Depth')
-# ay = plt.gca()
-# ay.invert_zaxis()
-# plt.show()
+ax = plt.axes(projection = '3d')
+ax.plot(e,n,d)
+ax.plot(e1,n1,d1,color = 'k')
+plt.xlabel("East")
+plt.ylabel("North")
+ax.set_zlabel('Depth')
+ay = plt.gca()
+ay.invert_zaxis()
+plt.show()
 
-import pandas as pd
-data = {
-    'n': n,
-    'e': e,
-    'd': d
-}
 
-df = pd.DataFrame(data)
-
-df.to_csv('type_3.csv', index=False)

@@ -3,16 +3,47 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import math
 
-vt = 9000
-ht = 12000
-kop = 2000
-build_up = 2
-final_incl = 0.523599
-initial_incl = 1.0472
+# vt = 9000
+# ht = 12000
+# kop = 2000
+# build_up = 2
+# final_incl = 0.523599
+# initial_incl = 1.0472
+# azi = 1.0472
+# sur_co = np.array([15.32, 5.06])
 
-azi = 1.0472
+vt = int(input("Enter vertical depth (vt): "))
+ht = int(input("Enter horizontal displacement (ht): "))
+kop = int(input("Enter kickoff point (kop): "))
+build_up = float(input("Enter build-up rate (degrees per 30m): "))
+final_incl = float(input("Enter final inclination (in radians): "))
+initial_incl = float(input("Enter initial inclination (in radians): "))
 
-sur_co = np.array([15.32, 5.06])
+
+# Surface coordinates input (two float values)
+surface_x = float(input("Enter surface North-coordinate: "))
+surface_y = float(input("Enter surface East-coordinate: "))
+sur_co = np.array([surface_x, surface_y])
+
+# Target coordinates input (two float values)
+target_x = float(input("Enter target North-coordinate: "))
+target_y = float(input("Enter target East-coordinate: "))
+tar_co = np.array([target_x, target_y])
+
+a = 0
+for [t_cor,s_cor] in zip(tar_co,sur_co):
+  a += (t_cor-s_cor)**2
+a = np.sqrt(a)
+ht = a
+
+if tar_co[0] == sur_co[0]:
+    slope = math.pi / 2  # 90 degrees in radians
+else:
+    slope = math.atan((tar_co[1] - sur_co[1]) / (tar_co[0] - sur_co[0]))
+
+azi = 90 - slope
+azi = math.radians(azi)
+
 e = []
 n = []
 d = []
@@ -117,24 +148,13 @@ for i in range(hx):
   n.append(nitr)
   
 
-# ax = plt.axes(projection = '3d')
-# ax.plot(e,n,d)
-# ax.plot(e1,n1,d1,color = 'k')
-# ax.plot(e2,n2,d2,color = 'k')
-# plt.xlabel("East")
-# plt.ylabel("North")
-# ax.set_zlabel('Depth')
-# ay = plt.gca()
-# ay.invert_zaxis()
-# plt.show()
-
-import pandas as pd
-data = {
-    'n': n,
-    'e': e,
-    'd': d
-}
-
-df = pd.DataFrame(data)
-
-df.to_csv('type_5.csv', index=False)
+ax = plt.axes(projection = '3d')
+ax.plot(e,n,d)
+ax.plot(e1,n1,d1,color = 'k')
+ax.plot(e2,n2,d2,color = 'k')
+plt.xlabel("East")
+plt.ylabel("North")
+ax.set_zlabel('Depth')
+ay = plt.gca()
+ay.invert_zaxis()
+plt.show()

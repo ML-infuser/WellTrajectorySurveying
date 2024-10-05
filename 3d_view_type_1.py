@@ -3,11 +3,26 @@ import matplotlib.pyplot as plt
 import math
 import pandas as pd
 
-vt = 9880
-kop = 1650
-sur_co = np.array([15.32, 5.06])
-tar_co = np.array([1650, 4510])
-build_up = 1.5
+# vt = 9880
+# kop = 1650
+# sur_co = np.array([15.32, 5.06])
+# tar_co = np.array([1650, 4510])
+# build_up = 1.5
+vt = int(input("Enter vertical depth (vt): "))
+kop = int(input("Enter kickoff point (kop): "))
+
+# Surface coordinates input (two float values)
+surface_x = float(input("Enter surface North-coordinate: "))
+surface_y = float(input("Enter surface East-coordinate: "))
+sur_co = np.array([surface_x, surface_y])
+
+# Target coordinates input (two float values)
+target_x = float(input("Enter target North-coordinate: "))
+target_y = float(input("Enter target East-coordinate: "))
+tar_co = np.array([target_x, target_y])
+
+build_up = float(input("Enter build-up rate (degrees per 100m): "))
+
 
 d = []
 h = []
@@ -27,7 +42,7 @@ y = 0
 x = math.atan((ht-r)/(vt - kop))
 y = math.asin(r/((1/math.cos(x)) * (vt-kop)))
 alpha = x + y
-# print(alpha)
+print(alpha)
 
 vc = r*math.sin(alpha)
 
@@ -90,23 +105,16 @@ for k in range(vt-kop-vc):
   n.append(nitr)
 
 # print(d[-1])
-# ax = plt.axes(projection = '3d')
-# ax.plot(e,n,d, color = 'c')
-# ax.plot(e1,n1,d1,color = 'k')
-# plt.xlabel("East")
-# plt.ylabel("North")
-# ax.set_zlabel('Depth')
-# ay = plt.gca()
-# ay.invert_zaxis()
-# plt.show()
+ax = plt.axes(projection = '3d')
+ax.plot(e,n,d)
+ax.plot(e1,n1,d1,color = 'k')
+plt.xlabel("East")
+plt.ylabel("North")
+ax.set_zlabel('Depth')
+ay = plt.gca()
+ay.invert_zaxis()
+plt.show()
 
-import pandas as pd
-data = {
-    'n': n,
-    'e': e,
-    'd': d
-}
-
-df = pd.DataFrame(data)
-
-df.to_csv('type_1.csv', index=False)
+# print(len(e))
+# print(len(n))
+# print(len(d))

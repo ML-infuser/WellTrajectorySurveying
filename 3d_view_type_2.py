@@ -3,16 +3,44 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
-vt = 12000
-ht = 6000
-kop = 1500
-build_up = 2
-drop_off = 1.5
-eoc = 11000
-f_inc = 0.349066
-azi = 1.0472
+# vt = 12000
+# ht = 6000
+# kop = 1500
+# build_up = 2
+# drop_off = 1.5
+# eoc = 11000
+# f_inc = 0.349066
+# azi = 1.0472
+# sur_co = np.array([15.32, 5.06])
+vt = int(input("Enter vertical depth (vt): "))
+ht = int(input("Enter horizontal displacement (ht): "))
+kop = int(input("Enter kickoff point (kop): "))
+build_up = float(input("Enter build-up rate (degrees per 100m): "))
+drop_off = float(input("Enter drop-off rate (degrees per 100m): "))
+eoc = int(input("Enter end of curve depth (eoc): "))
+f_inc = float(input("Enter final inclination (in radians): "))
 
-sur_co = np.array([15.32, 5.06])
+# Surface coordinates input (two float values)
+surface_x = float(input("Enter surface North-coordinate: "))
+surface_y = float(input("Enter surface East-coordinate: "))
+sur_co = np.array([surface_x, surface_y])
+target_x = float(input("Enter target North-coordinate: "))
+target_y = float(input("Enter target East-coordinate: "))
+tar_co = np.array([target_x, target_y])
+a = 0
+for [t_cor,s_cor] in zip(tar_co,sur_co):
+  a += (t_cor-s_cor)**2
+a = np.sqrt(a)
+ht = a
+
+if tar_co[0] == sur_co[0]:
+    slope = math.pi / 2  # 90 degrees in radians
+else:
+    slope = math.atan((tar_co[1] - sur_co[1]) / (tar_co[0] - sur_co[0]))
+
+azi = 90 - slope
+azi = math.radians(azi)
+
 
 r1 = 18000/(3.14*build_up)
 r2 = 18000/(3.14*drop_off)
@@ -25,7 +53,6 @@ ps = (pq**2 - qs**2)**0.5
 x = math.atan(oq/op)
 y = math.atan(qs/ps)
 alpha = x + y
-# print(alpha)
 
 vc = r1*math.sin(alpha)
 vc = math.ceil(vc)
@@ -138,15 +165,4 @@ plt.ylabel("North")
 ax.set_zlabel('Depth')
 ay = plt.gca()
 ay.invert_zaxis()
-# plt.show()
-
-import pandas as pd
-data = {
-    'n': n,
-    'e': e,
-    'd': d
-}
-
-df = pd.DataFrame(data)
-
-df.to_csv('type_2.csv', index=False)
+plt.show()

@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import math
 
 # vt = 12000
-# ht = 6000
 # kop = 1500
 # build_up = 2
 # drop_off = 1.5
@@ -13,7 +12,6 @@ import math
 # azi = 1.0472
 # sur_co = np.array([15.32, 5.06])
 vt = int(input("Enter vertical depth (vt): "))
-ht = int(input("Enter horizontal displacement (ht): "))
 kop = int(input("Enter kickoff point (kop): "))
 build_up = float(input("Enter build-up rate (degrees per 100m): "))
 drop_off = float(input("Enter drop-off rate (degrees per 100m): "))
